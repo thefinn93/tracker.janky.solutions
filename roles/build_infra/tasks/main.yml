@@ -17,15 +17,15 @@
     with_items:
       # - ams2
       # - ams3
-      # - blr1
+      - blr1
       # - fra1
-      # - lon1
+      - lon1
       - nyc1
       # - nyc2
       # - nyc3
       # - sfo1
       - sfo2
-      # - sgp1
+      - sgp1
       # - tor1
 
   - name: Setup IPv4 DNS records
