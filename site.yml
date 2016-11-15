@@ -5,9 +5,17 @@
     roles:
       - build_infra
 
-  - hosts: trackers
+  - hosts: monitoring:trackers
     roles:
       - basicshit
       - role: jnv.unattended-upgrades
         unattended_main: sre@janky.solutions
+      - munin-node
+
+  - hosts: trackers
+    roles:
       - opentracker
+
+  - hosts: monitoring
+    roles:
+      - munin
