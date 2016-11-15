@@ -1,5 +1,5 @@
 ---
-  - name: Make sum droplets
+  - name: Make trackers
     digital_ocean:
       state: present
       command: droplet
@@ -10,12 +10,11 @@
       ipv6: yes
       private_networking: yes
       ssh_key_ids: "{{ my_ssh_keys }}"
-      region_id: sfo2
+      region_id: "{{ item }}"
       image_id: debian-8-x64
       wait_timeout: 500
-    register: vms
+    register: trackers
     with_items:
-      - ams1
       # - ams2
       # - ams3
       # - blr1
@@ -35,22 +34,47 @@
       name: "{{ item.droplet.name }}"
       ip: "{{ item.droplet.ip_address }}"
       api_token: "{{ digital_ocean_token }}"
-    with_items: "{{ vms.results }}"
+    with_items: "{{ trackers.results }}"
 
-  # - name: Setup IPv4 DNS records
+  # - name: Setup IPv6 DNS records
   #   digital_ocean_domain:
   #     state: present
   #     name: "{{ item.droplet.name }}"
-  #     ip: "{{ item.droplet.ip_address }}"
+  #     ip: "{{ item.droplet.networks.v6[0].ip_address }}"
   #     api_token: "{{ digital_ocean_token }}"
-  #   with_items: "{{ vms.results }}"
+  #   with_items: "{{ trackers.results }}"
 
-  - name: Add droplets to our play
+  - name: Add trackers to our play
     add_host:
       hostname: "{{ item.droplet.name }}"
       ansible_ssh_host: "{{ item.droplet.ip_address }}"
       ansible_ssh_user: "root"
       groups: trackers
       do_metadata: "{{ item }}"
-    with_items: "{{ vms.results }}"
+    with_items: "{{ trackers.results }}"
+    changed_when: false
+
+  - name: Make monitoring boxes
+    digital_ocean:
+      state: present
+      command: droplet
+      name: "tracker-monitoring.janky.solutions"
+      unique_name: yes
+      api_token: "{{ digital_ocean_token }}"
+      size_id: 512mb
+      ipv6: yes
+      private_networking: yes
+      ssh_key_ids: "{{ my_ssh_keys }}"
+      region_id: sfo2
+      image_id: debian-8-x64
+      wait_timeout: 500
+    register: monitoring
+
+  - name: Add monitoring box to our play
+    add_host:
+      hostname: "{{ monitoring.droplet.name }}"
+      ansible_ssh_host: "{{ monitoring.droplet.ip_address }}"
+      ansible_ssh_user: "root"
+      groups: monitoring
+      do_metadata: "{{ monitoring }}"
     changed_when: false
