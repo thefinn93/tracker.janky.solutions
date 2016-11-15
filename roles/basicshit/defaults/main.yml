@@ -1,0 +1,9 @@
+ohmyzsh_theme: agnoster
+ohmyzsh_plugins:
+  - git
+  - command-not-found
+  - cp
+  - pip
+  - python
+  - virtualenv
+  - debian

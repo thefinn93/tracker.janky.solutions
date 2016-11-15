@@ -1,0 +1,13 @@
+---
+  - name: Rebuild OpenTracker
+    command: make -f Makefile{{ item }}
+    with_items: [4, 6]
+    args:
+      chdir: "{{ opentracker_src }}"
+
+  - name: Reload systemctl daemon
+    command: systemctl daemon-reload
+
+  - name: Restart OpenTracker
+    with_items: [4, 6]
+    service: name=opentracker{{ item }} state=restarted

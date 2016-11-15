@@ -1,0 +1,47 @@
+---
+  - name: Install depends
+    apt: name={{ item }} state=present
+    with_items:
+      - libowfat-dev
+      - zlib1g-dev
+
+  - name: Update OpenTracker code
+    git: repo={{ opentracker_repo }} dest={{ opentracker_src }}
+    notify:
+      - Rebuild OpenTracker
+
+  - name: Set OpenTracker build options
+    template: src=Makefile dest={{ opentracker_src }}/Makefile{{ item }}
+    vars:
+      - ipversion: "{{ item }}"
+      - flags: "{{ opentracker_build_flags }}"
+    with_items: [4, 6]
+    notify:
+      - Rebuild OpenTracker
+      - Restart OpenTracker
+
+  - name: Install OpenTracker service
+    template: src=opentracker.service dest=/etc/systemd/system/opentracker{{ item }}.service
+    vars:
+      ipversion: "{{ item }}"
+    with_items: [4, 6]
+    notify:
+      - Reload systemctl daemon
+      - Restart OpenTracker
+
+  - name: Make OpenTracker config folder
+    file: name=/etc/opentracker state=directory
+
+  - name: Install OpenTracker config
+    template: src=opentracker.conf dest=/etc/opentracker/opentracker{{ item }}.conf
+    vars:
+      ipversion: "{{ item }}"
+    with_items: [4, 6]
+    notify:
+      - Restart OpenTracker
+
+  - meta: flush_handlers
+
+  - name: Enable OpenTracker
+    service: name=opentracker{{ item }} enabled=yes state=started
+    with_items: [4, 6]

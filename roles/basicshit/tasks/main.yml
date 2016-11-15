@@ -1,0 +1,23 @@
+---
+  - name: Update packages
+    apt: upgrade=full update_cache=yes
+
+  - name: Install useful things from the debian repos
+    apt: name={{ item }} state=latest
+    with_items:
+      - htop
+      - mosh
+      - tmux
+      - ufw
+      - git
+      - zsh
+      - python-pip
+      - python-dev
+      - python-psutil
+      - python-virtualenv
+
+  - name: Install some useful things from pypi
+    pip: name={{ item }} state=latest
+    with_items: [thefuck]
+
+  - include: ohmyzsh.yml

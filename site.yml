@@ -1,0 +1,13 @@
+---
+  - hosts: 127.0.0.1
+    vars_files:
+      - vars/secrets.yml
+    roles:
+      - build_infra
+
+  - hosts: trackers
+    roles:
+      - basicshit
+      - role: jnv.unattended-upgrades
+        unattended_main: sre@janky.solutions
+      - opentracker

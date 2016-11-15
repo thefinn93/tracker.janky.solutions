@@ -1,0 +1,5 @@
+opentracker_repo: git://erdgeist.org/opentracker
+opentracker_src: /usr/local/src/opentracker
+opentracker_build_flags:
+  - WANT_COMPRESSION_GZIP
+  - WANT_SYNC_LIVE

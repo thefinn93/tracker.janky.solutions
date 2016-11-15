@@ -1,0 +1,9 @@
+---
+  - name: Update ohmyzsh
+    git: repo=https://github.com/robbyrussell/oh-my-zsh dest=/root/.oh-my-zsh
+
+  - name: Configure .zshrc
+    template: src=zshrc.j2 dest=/root/.zshrc
+
+  - name: Set the shell
+    user: name=root shell=/usr/bin/zsh

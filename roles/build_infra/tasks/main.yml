@@ -1,0 +1,56 @@
+---
+  - name: Make sum droplets
+    digital_ocean:
+      state: present
+      command: droplet
+      name: "{{ item }}.tracker.janky.solutions"
+      unique_name: yes
+      api_token: "{{ digital_ocean_token }}"
+      size_id: 512mb
+      ipv6: yes
+      private_networking: yes
+      ssh_key_ids: "{{ my_ssh_keys }}"
+      region_id: sfo2
+      image_id: debian-8-x64
+      wait_timeout: 500
+    register: vms
+    with_items:
+      - ams1
+      # - ams2
+      # - ams3
+      # - blr1
+      # - fra1
+      # - lon1
+      - nyc1
+      # - nyc2
+      # - nyc3
+      # - sfo1
+      - sfo2
+      # - sgp1
+      # - tor1
+
+  - name: Setup IPv4 DNS records
+    digital_ocean_domain:
+      state: present
+      name: "{{ item.droplet.name }}"
+      ip: "{{ item.droplet.ip_address }}"
+      api_token: "{{ digital_ocean_token }}"
+    with_items: "{{ vms.results }}"
+
+  # - name: Setup IPv4 DNS records
+  #   digital_ocean_domain:
+  #     state: present
+  #     name: "{{ item.droplet.name }}"
+  #     ip: "{{ item.droplet.ip_address }}"
+  #     api_token: "{{ digital_ocean_token }}"
+  #   with_items: "{{ vms.results }}"
+
+  - name: Add droplets to our play
+    add_host:
+      hostname: "{{ item.droplet.name }}"
+      ansible_ssh_host: "{{ item.droplet.ip_address }}"
+      ansible_ssh_user: "root"
+      groups: trackers
+      do_metadata: "{{ item }}"
+    with_items: "{{ vms.results }}"
+    changed_when: false
