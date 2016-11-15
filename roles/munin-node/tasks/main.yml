@@ -6,3 +6,24 @@
     template: src=munin-node.conf.j2 dest=/etc/munin/munin-node.conf
     notify:
       - Restart munin-node
+
+  - name: Install opentracker plugin
+    template: src=opentracker_ dest=/usr/share/munin/plugins/opentracker_ mode=a+x
+
+  - name: Activate opentracker plugin
+    file: state=link src=/usr/share/munin/plugins/opentracker_ dest=/etc/munin/plugins/opentracker{{ item }}
+    with_items:
+      - v4_conn
+      - v4_scrp
+      - v4_syncs
+      - v4_tcp
+      - v4_torr
+      - v4_udp
+      - v6_conn
+      - v6_scrp
+      - v6_syncs
+      - v6_tcp
+      - v6_torr
+      - v6_udp
+    notify:
+      - Restart munin-node
