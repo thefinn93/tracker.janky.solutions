@@ -16,6 +16,10 @@ ignore_file \.dpkg-(tmp|new|old|dist)$
 ignore_file \.rpm(save|new)$
 ignore_file \.pod$
 
-host_name {{ ansible_hostname }}
+{% for host in groups['monitoring'] %}
+cidr_allow {{ hostvars[host].ansible_default_ipv4.address }}/32
+{% endfor %}
+
+host_name {{ ansible_fqdn }}
 host *
 port 4949
