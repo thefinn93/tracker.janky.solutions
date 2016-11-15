@@ -1,9 +1,20 @@
 ---
+  - name: Install backports repo
+    apt_repository: repo="deb http://ftp.debian.org/debian jessie-backports main"
+
   - name: Install munin
     apt: name={{ item }} state=latest
     with_items:
       - apache2
       - munin
+
+  - name: Install certbot
+    apt: name=python-certbot-apache state=latest default_release=jessie-backports
+
+  - name: Enable munin in apache
+    template: src=munin-apache.conf dest=/etc/apache2/conf-enabled/munin.conf
+    notify:
+      - Restart apache
 
   - name: Install munin config for trackers
     template: src=trackers.conf dest=/etc/munin/munin-conf.d/trackers.conf
