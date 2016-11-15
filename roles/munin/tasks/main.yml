@@ -1,0 +1,9 @@
+---
+  - name: Install munin
+    apt: name={{ item }} state=latest
+    with_items:
+      - apache2
+      - munin
+
+  - name: Install munin config for trackers
+    template: src=trackers.conf dest=/etc/munin/munin-conf.d/trackers.conf
