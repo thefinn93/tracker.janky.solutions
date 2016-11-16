@@ -9,7 +9,7 @@
       size_id: 512mb
       ipv6: yes
       private_networking: yes
-      ssh_key_ids: "{{ my_ssh_keys }}"
+      ssh_key_ids: "{{ do_ssh_keys }}"
       region_id: "{{ item }}"
       image_id: debian-8-x64
       wait_timeout: 500
@@ -64,7 +64,7 @@
       size_id: 512mb
       ipv6: yes
       private_networking: yes
-      ssh_key_ids: "{{ my_ssh_keys }}"
+      ssh_key_ids: "{{ do_ssh_keys }}"
       region_id: sfo2
       image_id: debian-8-x64
       wait_timeout: 500
