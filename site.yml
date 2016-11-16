@@ -6,6 +6,8 @@
       - build_infra
 
   - hosts: monitoring:trackers
+    vars_files:
+      - vars/secrets.yml
     roles:
       - basicshit
       - role: jnv.unattended-upgrades
