@@ -12,6 +12,7 @@
       - git
       - xtail
       - zsh
+      - tcpdump
       - python-pip
       - python-dev
       - python-psutil
