@@ -9,6 +9,13 @@
 
   - name: Install opentracker plugin
     template: src=opentracker_ dest=/usr/share/munin/plugins/opentracker_ mode=a+x
+    notify:
+      - Restart munin-node
+
+  - name: Configure opentracker plugin
+    template: src=opentracker.conf dest=/etc/munin/plugin-conf.d/opentracker
+    notify:
+      - Restart munin-node
 
   - name: Activate opentracker plugin
     file: state=link src=/usr/share/munin/plugins/opentracker_ dest=/etc/munin/plugins/opentracker{{ item }}
