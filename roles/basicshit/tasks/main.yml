@@ -23,12 +23,7 @@
 
   - include: ohmyzsh.yml
 
-  - name: List all IPv4s
-    run_once: true
-    debug: var=hostvars[item].ansible_default_ipv4.address
-    with_items: "{{ groups['trackers'] }}"
-
-  - name: List all IPv6s
-    run_once: true
-    debug: var=hostvars[item].ansible_default_ipv6.address
-    with_items: "{{ groups['trackers'] }}"
+  - name: Add SSH keys
+    authorized_key: key={{ item }} user=root
+    when: ssh_keys is defined
+    with_items: "{{ ssh_keys }}"
