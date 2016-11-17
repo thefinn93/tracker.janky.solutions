@@ -15,6 +15,8 @@
       - munin-node
 
   - hosts: trackers
+    vars_files:
+      - vars/blacklist.yml
     roles:
       - opentracker
 

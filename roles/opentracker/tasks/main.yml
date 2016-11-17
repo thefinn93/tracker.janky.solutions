@@ -40,6 +40,11 @@
     notify:
       - Restart OpenTracker
 
+  - name: Install opentracker blacklist
+    template: src=blacklist dest=/etc/opentracker/blacklist
+    notify:
+      - Restart OpenTracker
+
   - meta: flush_handlers
 
   - name: Enable OpenTracker

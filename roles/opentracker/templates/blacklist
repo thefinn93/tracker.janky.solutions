@@ -1,0 +1,3 @@
+{% for hash in blacklist %}
+{{ hash }}
+{% endfor %}
