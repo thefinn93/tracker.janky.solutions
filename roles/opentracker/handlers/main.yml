@@ -9,5 +9,5 @@
     command: systemctl daemon-reload
 
   - name: Restart OpenTracker
-    with_items: [4, 6]
+    with_items: [4]
     service: name=opentracker{{ item }} state=restarted

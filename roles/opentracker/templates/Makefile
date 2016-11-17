@@ -9,7 +9,6 @@ BINDIR?=$(PREFIX)/bin
 {% for flag in flags %}
 FEATURES+=-D{{ flag }}
 {% endfor %}
-
 {% if ipversion == 6 %}
 FEATURES+=-DWANT_V6
 {% endif %}
