@@ -6,12 +6,13 @@
       - zlib1g-dev
 
   - name: Update OpenTracker code
-    git: repo={{ opentracker_repo }} dest={{ opentracker_src }}
+    git: repo={{ opentracker_repo }} dest={{ opentracker_src }}-IPv{{ item }}
+    with_items: [4, 6]
     notify:
       - Rebuild OpenTracker
 
   - name: Set OpenTracker build options
-    template: src=Makefile dest={{ opentracker_src }}/Makefile{{ item }}
+    template: src=Makefile dest={{ opentracker_src }}-IPv{{ item }}/Makefile
     vars:
       - ipversion: "{{ item }}"
       - flags: "{{ opentracker_build_flags }}"
@@ -19,6 +20,8 @@
     notify:
       - Rebuild OpenTracker
       - Restart OpenTracker
+
+  - meta: flush_handlers
 
   - name: Install OpenTracker service
     template: src=opentracker.service dest=/etc/systemd/system/opentracker{{ item }}.service

@@ -1,9 +1,9 @@
 ---
   - name: Rebuild OpenTracker
-    command: make -f Makefile{{ item }}
+    command: make -f Makefile
     with_items: [4, 6]
     args:
-      chdir: "{{ opentracker_src }}"
+      chdir: "{{ opentracker_src }}-IPv{{ item }}"
 
   - name: Reload systemctl daemon
     command: systemctl daemon-reload
