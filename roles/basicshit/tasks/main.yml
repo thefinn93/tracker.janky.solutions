@@ -28,3 +28,9 @@
     authorized_key: key={{ item }} user=root
     when: ssh_keys is defined
     with_items: "{{ ssh_keys }}"
+
+  - name: Allow SSH through the firewall
+    ufw: rule=allow name=OpenSSH
+
+  - name: Enable UFW
+    ufw: state=enabled

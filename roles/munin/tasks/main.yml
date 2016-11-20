@@ -18,3 +18,9 @@
 
   - name: Install munin config for trackers
     template: src=trackers.conf dest=/etc/munin/munin-conf.d/trackers.conf
+
+  - name: Allow HTTP through the firewall
+    ufw: port={{ item }} state=allow
+    with_items:
+      - 80
+      - 443

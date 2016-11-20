@@ -50,3 +50,6 @@
   - name: Enable OpenTracker
     service: name=opentracker{{ item }} enabled=yes state=started
     with_items: [4, 6]
+
+  - name: Allow OpenTracker access on port 80
+    ufw: port=80 rule=allow
