@@ -1,25 +1,11 @@
 ---
-  - hosts: 127.0.0.1
+  - hosts: trackers
     vars_files:
       - vars/secrets.yml
-    roles:
-      - build_infra
-
-  - hosts: monitoring:trackers
-    vars_files:
-      - vars/secrets.yml
+      - vars/blacklist.yml
     roles:
       - basicshit
       - role: jnv.unattended-upgrades
         unattended_main: sre@janky.solutions
-      - munin-node
-
-  - hosts: trackers
-    vars_files:
-      - vars/blacklist.yml
-    roles:
       - opentracker
-
-  - hosts: monitoring
-    roles:
-      - munin
+      - munin-node

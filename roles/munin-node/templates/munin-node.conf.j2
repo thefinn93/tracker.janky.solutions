@@ -16,8 +16,8 @@ ignore_file \.dpkg-(tmp|new|old|dist)$
 ignore_file \.rpm(save|new)$
 ignore_file \.pod$
 
-{% for host in groups['monitoring'] %}
-cidr_allow {{ hostvars[host].ansible_default_ipv4.address }}/32
+{% for host in munin_masters %}
+cidr_allow {{ host.ip }}/{{ host.subnet }}
 {% endfor %}
 
 host_name {{ ansible_fqdn }}

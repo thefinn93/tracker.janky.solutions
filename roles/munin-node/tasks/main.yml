@@ -1,6 +1,9 @@
 ---
-  - name: Install munin-node
-    apt: name=munin-node state=installed
+  - name: Install munin-node and depends
+    apt: name={{ item }} state=installed
+    with_items:
+      - munin-node
+      - liblwp-useragent-determined-perl
 
   - name: Configure munin-node
     template: src=munin-node.conf.j2 dest=/etc/munin/munin-node.conf
@@ -36,5 +39,5 @@
       - Restart munin-node
 
   - name: Allow munin master to access this munin-node
-    ufw: rule=allow port=4949 from_ip="{{ hostvars[item].ansible_default_ipv4.address }}"
-    with_items: "{{ groups['monitoring'] }}"
+    ufw: rule=allow port=4949 from_ip="{{ item.ip }}"
+    with_items: "{{ munin_masters }}"
