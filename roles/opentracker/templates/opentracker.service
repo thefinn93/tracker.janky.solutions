@@ -5,7 +5,8 @@ After=network.target
 
 [Service]
 Type=simple
-ExecStart={{ opentracker_src }}-IPv{{ item }}/opentracker.debug -f /etc/opentracker/opentracker{{ ipversion }}.conf
+SyslogIdentifier=opentracker{{ ipversion }}
+ExecStart={{ opentracker_src }}-IPv{{ ipversion }}/opentracker -f /etc/opentracker/opentracker{{ ipversion }}.conf
 Restart=always
 
 [Install]
