@@ -17,7 +17,7 @@ ignore_file \.rpm(save|new)$
 ignore_file \.pod$
 
 {% for host in munin_masters %}
-cidr_allow {{ host.ip }}/{{ host.subnet }}
+allow {{ host }}
 {% endfor %}
 
 host_name {{ ansible_fqdn }}
